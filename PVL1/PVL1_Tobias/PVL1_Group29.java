@@ -70,7 +70,7 @@ public class PVL1_Group29 {
 				}
 				else
 				{
-					if(data[3+i][j] >= data[0][0]) throw new IllegalArgumentException();
+					if(data[3+i][j] >= data[0][0] || data[3+i][j] < 0) throw new IllegalArgumentException();
 				}
 			}
 		}
