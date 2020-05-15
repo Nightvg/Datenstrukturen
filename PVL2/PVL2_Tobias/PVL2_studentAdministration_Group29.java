@@ -8,6 +8,7 @@ public class PVL2_studentAdministration_Group29 implements StudentAdministration
 	
 	private boolean matricleExists(int matriculationNumber)
 	{
+		if(matriculationNumber < 1 || matriculationNumber > 999) return false;
 		for(int i = 0; i < this.students.size();i++)
 		{
 			if(this.students.get(i).getMatriculationNumber() == matriculationNumber) return true;
@@ -100,7 +101,7 @@ public class PVL2_studentAdministration_Group29 implements StudentAdministration
 	
 	public String find(Integer matriculationNumber)
 	{
-		if(matriculationNumber == null) return null;
+		if(matriculationNumber == null || matriculationNumber < 1 || matriculationNumber > 999) return null;
 		Student tmp = this.binarySearch(matriculationNumber);
 		if(tmp == null) return null;
 		return tmp.getStudent();
@@ -114,9 +115,8 @@ public class PVL2_studentAdministration_Group29 implements StudentAdministration
 		Student tmp = this.binarySearch(matriculationNumber);
 		Cours c = tmp.updateCours(courseID, passed);
 		if(c.getTries() >= 3 && !c.getPassed())
-		{
+		{			
 			this.deregister(matriculationNumber);
-			return null;
 		}
 		
 		return c.getCours();
@@ -127,7 +127,7 @@ public class PVL2_studentAdministration_Group29 implements StudentAdministration
 		String s = "";
 		for(int i = 0; i < this.students.size(); i++)
 		{
-			s += this.students.get(i).getStudent();
+			s += this.students.get(i).getStudent() + "\n\n";
 		}
 		
 		return s;
