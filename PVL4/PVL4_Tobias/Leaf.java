@@ -3,7 +3,7 @@ package PVL4_Tobias;
 public class Leaf extends Node{
 	private char sign;
 	
-	public Leaf(float prob, char sign)
+	public Leaf(int prob, char sign)
 	{
 		super();
 		this.prob = prob;

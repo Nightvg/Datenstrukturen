@@ -21,7 +21,7 @@ public class PVL4_Group29 implements HuffmanCode{
 		
 		if(alphabet.length == 1)
 		{
-			this.root = new Leaf(probabilities[0], alphabet[0]);
+			this.root = new Leaf(Math.round(probabilities[0]*1000), alphabet[0]);
 			return;
 		}
 		
@@ -32,17 +32,35 @@ public class PVL4_Group29 implements HuffmanCode{
 		
 		for(int i = 0; i < alphabet.length; i++)
 		{
-			Leaf tmp = new Leaf(probabilities[i], alphabet[i]);
-			this.addSorted(tmp, list);
+			Leaf tmp = new Leaf(Math.round(probabilities[i]*1000), alphabet[i]);
+			list.add(tmp);
 		}
 		
 		while(list.size() > 1)
 		{
+			int l = this.searchLowest(list);
+			int l2 = this.searchLowest(list, l);
+			Node tmp = null;
+			
+			switch(this.compareTo(list.get(l), list.get(l2)))
+			{
+				case 1:
+					tmp = new Node(list.get(l), list.get(l2));
+					break;
+				case -1:
+					tmp = new Node(list.get(l2), list.get(l));
+					break;
+			}
+			
+			list.set(Math.min(l, l2), tmp);
+			list.remove(Math.max(l, l2));
+			
+			/*
 			int last_index = list.size() - 1;
-			Node tmp = new Node(list.get(last_index - 1), list.get(last_index));
+			
 			list.remove(last_index);
 			list.remove(last_index - 1);
-			addSorted(tmp, list);
+			addSorted(tmp, list);*/
 		}
 		
 		this.root = list.get(0);
@@ -105,12 +123,8 @@ public class PVL4_Group29 implements HuffmanCode{
 			return ((Leaf) n).getSign() + " - " + path + "\n";
 		}
 		
-		String pathL = path + '1';
-		String pathR = path + '0';
-		
-		return depthPrint(n.getLeft(), pathL) + depthPrint(n.getRight(), pathR);
+		return depthPrint(n.getLeft(), path + 1) + depthPrint(n.getRight(), path + 0);
 	}
-	
 	
 	private void addSorted(Node n, ArrayList<Node> list)
 	{
@@ -143,11 +157,23 @@ public class PVL4_Group29 implements HuffmanCode{
 			getSigns(n, left);
 			getSigns(m, right);
 	
-			if(this.alphabet.indexOf(left.get(0)) < this.alphabet.indexOf(right.get(0))) return 1;
+			if(this.alphabet.indexOf(getLowestChar(left)) < this.alphabet.indexOf(getLowestChar(right))) return 1;
 			else return -1;
 		}
 		
 		return 0;
+	}
+	
+	private char getLowestChar(ArrayList<Character> list)
+	{
+		char a = list.get(0);
+		
+		for(int i = 1; i < list.size(); i++)
+		{
+			if(this.alphabet.indexOf(list.get(i)) < this.alphabet.indexOf(a)) a = list.get(i);
+		}
+		
+		return a;
 	}
 	
 	private void getSigns(Node n, ArrayList<Character> field)
@@ -175,5 +201,28 @@ public class PVL4_Group29 implements HuffmanCode{
 		
 		if(left.contains("#")) return right;
 		else return left;	
+	}
+	
+	private int searchLowest(ArrayList<Node> list)
+	{
+		int tmp = 0;
+		for(int i = 0; i < list.size(); i++)
+		{
+			if(list.get(i).getProb() < list.get(tmp).getProb()) tmp = i; 
+		}
+		
+		return tmp;
+	}
+	
+	private int searchLowest(ArrayList<Node> list, int j)
+	{
+		int tmp = (j == 0) ? 1 : 0;
+
+		for(int i = 0; i < list.size(); i++)
+		{
+			if(list.get(i).getProb() < list.get(tmp).getProb() && i != j) tmp = i; 
+		}
+		
+		return tmp;
 	}
 }

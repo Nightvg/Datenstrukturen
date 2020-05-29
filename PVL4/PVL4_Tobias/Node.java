@@ -3,7 +3,7 @@ package PVL4_Tobias;
 public class Node{
 
 	private Node left, right;
-	protected float prob;
+	protected int prob;
 	
 	protected Node()
 	{
@@ -19,7 +19,7 @@ public class Node{
 		this.right = right;
 	}
 
-	public float getProb()
+	public int getProb()
 	{
 		return this.prob;
 	}
