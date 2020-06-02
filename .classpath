@@ -9,5 +9,6 @@
 	<classpathentry kind="src" path="PVL2"/>
 	<classpathentry kind="src" path="PVL3"/>
 	<classpathentry kind="src" path="PVL4"/>
+	<classpathentry kind="src" path="PVL5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
