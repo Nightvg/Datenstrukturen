@@ -19,9 +19,10 @@ public class Execute {
 		//set1 = {‘1‘, ‘2‘, ‘4‘, ‘5‘}
 		//set3 = {‘3‘, ‘4‘, ‘5‘, ‘6‘}
 		
+		
 //		set1.union(set3);
 //		set1.print();
-//		//set1 = {‘1‘, ‘2‘, ‘3‘, ‘4‘, ‘5‘, ‘6‘}
+		//set1 = {‘1‘, ‘2‘, ‘3‘, ‘4‘, ‘5‘, ‘6‘}
 		
 //		set1.cut(set3);
 //		set1.print();
