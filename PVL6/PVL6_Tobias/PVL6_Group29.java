@@ -1,31 +1,37 @@
 package PVL6_Tobias;
 import java.util.PriorityQueue;
 
+/*
+ * Beteiligte Personen:
+ * 
+ * Klenke, Susann
+ * Geier, Annina Tara Tanita Petra
+ * Allrich, Tobias
+ * Porrmann, Tim
+ * Lange, David
+ */
+
 public class PVL6_Group29 implements SchedulingTask{
 
 	private boolean[] pids;
-	private int kernelNumber, qSize;
+	private int kernelNumber;
 	private ProcessImplementation[] buffer;
 	private PriorityQueue<ProcessImplementation> q;
+	private PriorityQueue<ProcessImplementation> insert;
 	
 	public PVL6_Group29(int kernelNumber)
 	{
+		if(kernelNumber < 1) return;
 		this.kernelNumber = kernelNumber;
 		this.pids = new boolean[255];
 		this.buffer = new ProcessImplementation[kernelNumber];
-		this.q = new PriorityQueue<>(new ProcessComparator());
-		this.qSize = 11;
+		this.q = new PriorityQueue<>(255, new ProcessComparator());
+		this.insert = new PriorityQueue<>(255, new InsertComparator());
 	}
 	
 	@Override
 	public int createProcess(int arrivalTime, int executionTime, int priority) {
-		if(q.size() + 1 > qSize)
-		{
-			PriorityQueue<ProcessImplementation> q2 = new PriorityQueue<>(2*qSize, new ProcessComparator());
-			q2.addAll(q);
-			q = q2;
-			qSize = 2*qSize;
-		}
+		if(arrivalTime < 0 || executionTime < 1) return -1;
 		int i = getLowestPID() + 1;
 		if(i == 0) return -1;
 		q.add(new ProcessImplementation(i, arrivalTime, executionTime, priority));
@@ -34,7 +40,7 @@ public class PVL6_Group29 implements SchedulingTask{
 
 	@Override
 	public boolean deleteProcess(int pid) {
-		if(!pids[pid - 1]) return false;
+		if(pid < 1 || pid > 255 || !pids[pid - 1]) return false;
 		pids[pid - 1] = false;
 		return q.remove(new ProcessImplementation(pid));
 	}
@@ -48,13 +54,18 @@ public class PVL6_Group29 implements SchedulingTask{
 			String line = "";
 			line += Integer.toString(i) + " : ";
 			
+			while(!q.isEmpty() && q.peek().getArrivalTime() == i)
+			{
+				insert.add(q.poll());
+			}
+			
 			for(int j = 0; j < kernelNumber; j++)
 			{
 				if(buffer[j] != null && buffer[j].getExecutionTime() == 0) buffer[j] = null;
-				if(!q.isEmpty() && q.peek().getArrivalTime() <= i)
+				if(!insert.isEmpty())
 				{
 					int buff = getFreeProcessor();
-					if(buff >= 0) buffer[buff] = q.poll();
+					if(buff >= 0) buffer[buff] = insert.poll();
 				}
 				
 				if(buffer[j] != null)
@@ -68,8 +79,8 @@ public class PVL6_Group29 implements SchedulingTask{
 			line += "\n";
 			
 			i++;
-			if(q.isEmpty() && isBufferEmpty()) break;
-			else output += line;
+			if(isBufferEmpty() && insert.isEmpty() && q.isEmpty()) break;
+			output += line;
 		}
 		
 		return output;
@@ -77,7 +88,7 @@ public class PVL6_Group29 implements SchedulingTask{
 	
 	private int getLowestPID()
 	{
-		for(int i = 0; i < 256; i++)
+		for(int i = 0; i < 255; i++)
 		{
 			if(!pids[i])
 			{
