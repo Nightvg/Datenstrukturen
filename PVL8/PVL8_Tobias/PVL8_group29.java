@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/*
+ * Beteiligte Personen:
+ * 
+ * Klenke, Susann
+ * Geier, Annina Tara Tanita Petra
+ * Allrich, Tobias
+ * Porrmann, Tim
+ * Lange, David
+ */
+
 public class PVL8_group29 implements Graph_II{
 
 	private int nodes;
